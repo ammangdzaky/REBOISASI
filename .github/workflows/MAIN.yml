@@ -1,0 +1,23 @@
+name: REBO
+
+on:
+  schedule:
+    - cron: "0/5 * * * *"
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: action/checkout@v3
+
+      - name: Run script
+        run: |
+          echo " " >> README.md
+          git config user.name "ammangdzaky"
+          git config user.email "abdurrahmandzaky01@gmail.com"
+          git add README.md
+          git commit -m "PENGHIJAUAN BOSKU"
+          git push
