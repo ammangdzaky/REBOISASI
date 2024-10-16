@@ -2,7 +2,7 @@ name: REBO
 
 on:
   schedule:
-    - cron: "0/30 * * * *" # Menjadwalkan setiap 30 menit
+    - cron: "0 0,2,4,6,8,10,12,14,16,18,20,22 * * *" # Menjalankan setiap 2 jam
 
   workflow_dispatch: # Memungkinkan pemicu manual
 
