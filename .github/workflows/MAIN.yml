@@ -2,22 +2,22 @@ name: REBO
 
 on:
   schedule:
-    - cron: "0/5 * * * *"
+    - cron: "0/30 * * * *" # Menjadwalkan setiap 30 menit
 
-  workflow_dispatch:
+  workflow_dispatch: # Memungkinkan pemicu manual
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3 # Mengambil kode dari repositori
 
       - name: Run script
         run: |
-          echo " " >> README.md
+          echo "Last update: $(date)" >> README.md  # Menambahkan timestamp ke README.md
           git config user.name "ammangdzaky"
           git config user.email "abdurrahmandzaky01@gmail.com"
           git add README.md
-          git commit -m "PENGHIJAUAN BOSKU"
-          git push --force  # Menggunakan force push untuk memaksa push perubahan
+          git commit -m "PENGHIJAUAN BOSKU" || echo "No changes to commit"  # Menghindari error jika tidak ada perubahan
+          git push
