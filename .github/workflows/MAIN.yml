@@ -20,4 +20,4 @@ jobs:
           git config user.email "abdurrahmandzaky01@gmail.com"
           git add README.md
           git commit -m "PENGHIJAUAN BOSKU"
-          git push
+          git push --force  # Menggunakan force push untuk memaksa push perubahan
