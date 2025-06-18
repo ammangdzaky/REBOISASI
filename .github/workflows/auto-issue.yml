@@ -2,7 +2,7 @@ name: Auto Issue
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # Tiap 6 jam UTC
+    - cron: "0 2,10,18 * * *"
   workflow_dispatch:
 
 jobs:
@@ -18,17 +18,24 @@ jobs:
           sudo apt update
           sudo apt install -y gh
 
-      - name: Buat Issue
+      - name: Buat Issue & Simpan Nomor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p .github/ISSUE_TEMPLATE
-          echo "🗓 Tanggal: $(date)" > .github/ISSUE_TEMPLATE/auto-log.md
-          echo "" >> .github/ISSUE_TEMPLATE/auto-log.md
-          echo "- Commit otomatis berjalan ✔️" >> .github/ISSUE_TEMPLATE/auto-log.md
-          echo "- PR otomatis dikirim ✔️" >> .github/ISSUE_TEMPLATE/auto-log.md
-          echo "- Tidak ada error yang terdeteksi ❌" >> .github/ISSUE_TEMPLATE/auto-log.md
+          echo "🗓 Tanggal: $(date)" > autolog.md
+          echo "- Commit otomatis berjalan ✔️" >> autolog.md
+          echo "- PR otomatis dikirim ✔️" >> autolog.md
+          echo "- Tidak ada error yang terdeteksi ❌" >> autolog.md
 
-          gh issue create \
-            --title "🗓 Auto Log - $(date '+%Y-%m-%d %H:%M')" \
-            --body-file ".github/ISSUE_TEMPLATE/auto-log.md"
+          ISSUE_URL=$(gh issue create --title "🗓 Auto Log - $(date '+%Y-%m-%d %H:%M')" --body-file autolog.md)
+          echo "$ISSUE_URL"
+
+          ISSUE_NUMBER=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
+          echo "$ISSUE_NUMBER" > latest-issue.txt
+
+          git config user.name "ammangdzaky"
+          git config user.email "abdurrahmandzaky01@gmail.com"
+
+          git add latest-issue.txt
+          git commit -m "🔢 Simpan nomor issue terakhir: #$ISSUE_NUMBER"
+          git push origin main

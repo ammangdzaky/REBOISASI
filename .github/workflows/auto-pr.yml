@@ -2,7 +2,7 @@ name: Auto Pull Request
 
 on:
   schedule:
-    - cron: "0 */4 * * *"  # Tiap 4 jam UTC
+    - cron: "30 2,10,18 * * *"
   workflow_dispatch:
 
 jobs:
@@ -34,8 +34,9 @@ jobs:
           git commit -m "🤖 Auto PR: $(date)"
           git push origin "$BRANCH_NAME"
 
+          ISSUE_NUMBER=$(cat latest-issue.txt || echo "0")
           gh pr create \
             --base main \
             --head "$BRANCH_NAME" \
             --title "🤖 Auto PR: $(date)" \
-            --body "Closes #${{ github.run_number }}\n\nPR otomatis dari GitHub Actions"
+            --body "Closes #$ISSUE_NUMBER\n\nPR otomatis dari GitHub Actions"
