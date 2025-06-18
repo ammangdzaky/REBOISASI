@@ -2,7 +2,7 @@ name: Auto Issue
 
 on:
   schedule:
-    - cron: "0 2,10,18 * * *"  # Jalan 3x sehari
+    - cron: "0 */6 * * *"  # Tiap 6 jam UTC
   workflow_dispatch:
 
 jobs:
@@ -22,13 +22,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p .github/log
-          echo "🗓 Tanggal: $(date)" > .github/log/auto-log.md
-          echo "" >> .github/log/auto-log.md
-          echo "- Commit otomatis berjalan ✔️" >> .github/log/auto-log.md
-          echo "- PR otomatis dikirim ✔️" >> .github/log/auto-log.md
-          echo "- Tidak ada error yang terdeteksi ❌" >> .github/log/auto-log.md
+          mkdir -p .github/ISSUE_TEMPLATE
+          echo "🗓 Tanggal: $(date)" > .github/ISSUE_TEMPLATE/auto-log.md
+          echo "" >> .github/ISSUE_TEMPLATE/auto-log.md
+          echo "- Commit otomatis berjalan ✔️" >> .github/ISSUE_TEMPLATE/auto-log.md
+          echo "- PR otomatis dikirim ✔️" >> .github/ISSUE_TEMPLATE/auto-log.md
+          echo "- Tidak ada error yang terdeteksi ❌" >> .github/ISSUE_TEMPLATE/auto-log.md
 
           gh issue create \
             --title "🗓 Auto Log - $(date '+%Y-%m-%d %H:%M')" \
-            --body-file ".github/log/auto-log.md"
+            --body-file ".github/ISSUE_TEMPLATE/auto-log.md"
