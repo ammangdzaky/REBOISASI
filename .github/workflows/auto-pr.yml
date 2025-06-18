@@ -1,9 +1,7 @@
 name: Auto Pull Request
 
 on:
-  schedule:
-    - cron: "0 1,9,17 * * *"  # Jalan 3x sehari
-  workflow_dispatch:  # Bisa dijalankan manual
+  workflow_dispatch:
 
 jobs:
   auto-pr:
@@ -19,7 +17,9 @@ jobs:
           git config user.email "abdurrahmandzaky01@gmail.com"
 
       - name: Install GitHub CLI
-        uses: cli/gh-action@v2  # INI YANG PENTING
+        run: |
+          sudo apt update
+          sudo apt install -y gh
 
       - name: Buat Branch & PR
         env:
