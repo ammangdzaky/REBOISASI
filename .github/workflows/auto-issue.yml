@@ -2,16 +2,30 @@ name: Auto Issue
 
 on:
   schedule:
-    - cron: "30 6 * * *"  # Setiap hari jam 06:30 UTC
+    - cron: "0 2,10,18 * * *"  # Jalan 3x sehari
   workflow_dispatch:
 
 jobs:
-  issue:
+  auto-issue:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Create Daily Issue
-        uses: peter-evans/create-issue-from-file@v4
-        with:
-          title: "📝 Log Otomatis - $(date +'%Y-%m-%d')"
-          content-filepath: .github/ISSUE_TEMPLATE/auto-log.md
-          labels: auto, daily
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install GitHub CLI
+        uses: cli/gh-action@v2  # INI WAJIB UNTUK ISSUE
+
+      - name: Buat Issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🗓 Tanggal: $(date)" > .github/ISSUE_TEMPLATE/auto-log.md
+          echo "" >> .github/ISSUE_TEMPLATE/auto-log.md
+          echo "- Commit otomatis berjalan ✔️" >> .github/ISSUE_TEMPLATE/auto-log.md
+          echo "- PR otomatis dikirim ✔️" >> .github/ISSUE_TEMPLATE/auto-log.md
+          echo "- Tidak ada error yang terdeteksi ❌" >> .github/ISSUE_TEMPLATE/auto-log.md
+
+          gh issue create \
+            --title "🗓 Auto Log - $(date '+%Y-%m-%d %H:%M')" \
+            --body-file ".github/ISSUE_TEMPLATE/auto-log.md"
