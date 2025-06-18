@@ -1,0 +1,36 @@
+name: Auto Pull Request
+
+on:
+  schedule:
+    - cron: "0 1,9,17 * * *"  # Jam 01, 09, 17 UTC
+  workflow_dispatch:
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Git
+        run: |
+          git config user.name "ammangdzaky"
+          git config user.email "abdurrahmandzaky01@gmail.com"
+
+      - name: Buat branch & commit
+        run: |
+          BRANCH="auto-pr-$(date +%H%M)"
+          git checkout -b $BRANCH || git checkout $BRANCH
+          echo "PR update: $(date)" >> pr-log.txt
+          git add pr-log.txt
+          git commit -m "🌿 Auto PR update: $(date)" || echo "No changes"
+          git push origin $BRANCH
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          head: ${{ steps.set-branch.outputs.branch }}
+          title: "🌿 Auto PR - $(date +'%Y-%m-%d %H:%M')"
+          body: "Pull request otomatis harian."

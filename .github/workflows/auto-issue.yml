@@ -1,0 +1,17 @@
+name: Auto Issue
+
+on:
+  schedule:
+    - cron: "30 6 * * *"  # Setiap hari jam 06:30 UTC
+  workflow_dispatch:
+
+jobs:
+  issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Daily Issue
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: "📝 Log Otomatis - $(date +'%Y-%m-%d')"
+          content-filepath: .github/ISSUE_TEMPLATE/auto-log.md
+          labels: auto, daily
